@@ -4,7 +4,8 @@
   "description": "Let agents use GitHub more ergonomically",
   "author": {
     "name": "Ted Mader",
-    "url": "https://github.com/patinaproject"
+    "email": "ted@patinaproject.com",
+    "url": "https://github.com/tlmader"
   },
   "homepage": "https://github.com/patinaproject/github-flows",
   "repository": "https://github.com/patinaproject/github-flows",

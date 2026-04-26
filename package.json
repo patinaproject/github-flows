@@ -5,7 +5,8 @@
   "description": "Let agents use GitHub more ergonomically",
   "author": {
     "name": "Ted Mader",
-    "email": "ted@patinaproject.com"
+    "email": "ted@patinaproject.com",
+    "url": "https://github.com/tlmader"
   },
   "license": "MIT",
   "packageManager": "pnpm@10.33.2",
