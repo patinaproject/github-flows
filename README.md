@@ -1,17 +1,48 @@
 # github-flows
 
-Let agents use GitHub more ergonomically
+Slash-command skills that let coding agents file issues, start branches, edit issues, and write changelogs in any GitHub repo.
 
-`github-flows` is a Claude Code + Codex plugin. It ships installable skills under `skills/` and is distributed through the [`patinaproject/skills`](https://github.com/patinaproject/skills) marketplace.
+[![CI](https://github.com/patinaproject/github-flows/actions/workflows/lint-md.yml/badge.svg)](https://github.com/patinaproject/github-flows/actions/workflows/lint-md.yml)
+[![Latest release](https://img.shields.io/github/v/release/patinaproject/github-flows)](https://github.com/patinaproject/github-flows/releases)
+[![License](https://img.shields.io/github/license/patinaproject/github-flows)](./LICENSE)
 
-## What this plugin does
+<!-- Hero asset: replace this comment with an <img src="docs/assets/hero.png" alt="github-flows new-issue running in Claude Code" /> tag once docs/assets/hero.png lands. Tracked as a follow-up. -->
 
-<!-- One-paragraph overview of what the plugin does for the user. -->
-<!-- Keep it concrete. Example: "Takes a GitHub issue and routes it through a -->
-<!-- brainstorm → plan → execute → review → finish workflow across a canonical -->
-<!-- teammate roster, using repo-owned design and plan artifacts." -->
+## What you get
 
-## Installation
+- **`/github-flows:new-issue`** — File a new GitHub issue with smart label selection, duplicate detection, and a public-repo leak guard.
+- **`/github-flows:edit-issue`** — Edit an existing issue's title, body, labels, assignees, milestone, state, close reason, or relationships, preferring GraphQL where REST falls short.
+- **`/github-flows:new-branch`** — Start work on an issue: branch from the default branch as `<issue-number>-<kebab-title>`, rebase, and install dependencies via the highest-priority lockfile.
+- **`/github-flows:write-changelog`** — Render a user-facing changelog from a GitHub milestone, sourced from closed issues and their merging PRs.
+
+## Quick start
+
+Get from zero to a real invocation in under a minute (assumes [Claude Code](https://docs.claude.com/claude-code)):
+
+1. Add the Patina marketplace:
+
+   ```text
+   /plugin marketplace add patinaproject/skills
+   ```
+
+2. Install the plugin:
+
+   ```text
+   /plugin install github-flows@patinaproject-skills
+   ```
+
+3. File a real issue against this repo to confirm everything works:
+
+   ```text
+   /github-flows:new-issue patinaproject/github-flows "Tried github-flows quick start"
+   ```
+
+The skill drafts the issue, runs duplicate detection, and asks you to confirm before posting.
+
+## Install in another editor
+
+<details>
+<summary>Show install steps for Cursor, Windsurf, Copilot, Codex, and others</summary>
 
 `github-flows` ships as a Claude Code + Codex plugin. Other supported editors read the repository-level files this plugin emits (`AGENTS.md`, `.cursor/`, `.windsurfrules`, `.github/copilot-instructions.md`) directly — those tools require no additional plugin install. Pick the section for your tool.
 
@@ -149,12 +180,7 @@ Continue.dev support is opt-in. Add the following entry to your `.continue/confi
 
 Then ask Continue to apply the `github-flows` workflow described in `AGENTS.md`.
 
-## Usage
-
-<!-- Example prompts or invocations tailored to this plugin. -->
-<!-- Example: -->
-<!-- /github-flows:github-flows work on issue 42 -->
-<!-- /github-flows:github-flows resume from review -->
+</details>
 
 ## Development
 
@@ -171,12 +197,13 @@ Commits and PR titles follow `type: #<issue> short description`.
 
 Releases are driven by [release-please](https://github.com/googleapis/release-please) — merge the standing release PR to cut a new `vX.Y.Z`. See [`RELEASING.md`](./RELEASING.md).
 
-## Contributing
-
-See [`CONTRIBUTING.md`](./CONTRIBUTING.md) and [`AGENTS.md`](./AGENTS.md).
-
 ## Related
 
-- [`skills/github-flows/SKILL.md`](./skills/github-flows/SKILL.md) — skill contract.
-- [`patinaproject/skills`](https://github.com/patinaproject/skills) — marketplace distributing Patina plugins.
-- [`patinaproject/bootstrap`](https://github.com/patinaproject/bootstrap) — scaffolding skill that emitted this repo's baseline.
+- [Patina marketplace (`patinaproject/skills`)](https://github.com/patinaproject/skills)
+- [Contributing](./CONTRIBUTING.md)
+- [Security policy](./SECURITY.md)
+- [Release process](./RELEASING.md)
+
+## License
+
+MIT — see [`LICENSE`](./LICENSE).
