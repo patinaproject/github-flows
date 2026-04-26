@@ -6,6 +6,13 @@ Ship the four GitHub-ergonomics skills the `github-flows` plugin exists to deliv
 
 This design covers the four skill workflows plus the two supporting docs (`.github/LABELS.md`, `docs/issue-filing-style.md`) and the cross-cutting patterns shared between them. Phase 1 (the bootstrap pass) is already committed at `cf3a49b` and is in-scope for the same PR but not re-designed here.
 
+## Decisions (Gate 1 round 2)
+
+The following decisions resolve open questions raised at first Gate 1 pass:
+
+- **Skill names + invocation surface.** The four skills are `edit-issue`, `new-issue`, `new-branch`, `write-changelog` (renamed from `changelog`). Each is invoked as `/github-flows:<skill>` — Claude Code requires plugin skills to be namespaced, and there is no bare `/skill-name` form for plugin-shipped skills. Reference plugins follow the same convention: `patinaproject/bootstrap` uses `/bootstrap:bootstrap`, `patinaproject/superteam` uses `/superteam:superteam`. Each `SKILL.md` documents only the namespaced form.
+- **Changelog typography.** The `/write-changelog` renderer uses an **en dash** (`–`, U+2013) with spaces on either side wherever a dash separator appears — the milestone heading (`## [v0.1.0] – 2026-04-26`) and the entry separator (`**Title** – description`). It must never emit an em dash (`—`, U+2014) or a double-hyphen (`--`). Markdownlint config (`MD019`/`MD025`) is unaffected; this is a renderer-level rule encoded in `workflow.md`.
+
 ## Cross-cutting decisions
 
 These apply to all four skills and live once in shared sections of each `workflow.md`:
@@ -123,17 +130,19 @@ Example: issue 42 "Let agents use GitHub more ergonomically" → `42-let-agents-
 
 **Refusals.** Dirty tree; issue not found; cross-repo `-R`; rebase conflict (surface conflict and stop without aborting the rebase, so the user can resolve).
 
-### `/changelog`
+### `/write-changelog`
 
-**Intent.** Render a user-facing changelog block for a milestone, sourced from the merging PRs of its closed issues. The output is Keep-a-Changelog flavored and matches the `## [<version>] — <date>` heading shape already in `CHANGELOG.md`.
+**Intent.** Render a user-facing changelog block for a milestone, sourced from the merging PRs of its closed issues. Output is plain Markdown to stdout — the user copies, edits, and pastes wherever the release notes live. There is no Featurebase or external publishing path.
 
-**Source of truth.** Milestones, not branches. `release-please` cuts version tags from conventional commits, but the user-facing **narrative** (what changed for users this release) comes from the milestone's closed-issue set + the squash-merge commit subjects of their merging PRs.
+**Inspiration.** The `patinaproject/patinaproject` `/changelog-generator` skill — adopted: the **filtering rules** (drop `chore`/`ci`/`refactor`/`test`/`build`/`style`/`docs`; keep `feat`/`fix`/`perf`; `docs` only kept when the issue carries a `documentation` label, mirroring the reference's "internal vs. user-facing docs" carve-out), the **friendly bucket names** (`New` / `Improved` / `Fixed`), the **translation rules** (drop `type:`/`#N` prefixes, sentence case, plain language, no corporate vocabulary), and the **omit-empty-section** output rule. **Diverged:** source is **GitHub milestones + merging PRs**, not raw `git log` over a tag/time range. Rationale: matches this repo's release-please flow (milestones curate what shipped this release; release-please cuts the tag), and gives a clean way for humans to scope the changelog without remembering tag pairs.
+
+**Source of truth.** Milestones. The user supplies a milestone title or number; the skill walks closed issues in that milestone, resolves their merging PRs, and renders one block.
 
 **Steps.**
 
-1. Resolve milestone: accept title or number; fetch via `gh api repos/:owner/:repo/milestones --jq '.[] | select(.title=="<title>" or .number==<n>)'`. Refuse if not found or open (configurable: `--include-open` allows draft renders).
+1. Resolve milestone: accept title or number; fetch via `gh api repos/:owner/:repo/milestones --jq '.[] | select(.title=="<title>" or .number==<n>)'`. Default behavior renders only **closed** milestones (the release is "done"); `--include-open` allows draft renders for in-flight milestones.
 2. List milestone issues: `gh issue list --milestone "<title>" --state all --limit 200 --json number,title,labels,state,closedAt`.
-3. For each closed issue, find merging PR(s) via the issue's `closed_by` association — query the timeline:
+3. For each closed issue, find merging PR(s) via the issue timeline:
 
     ```graphql
     query($o:String!,$r:String!,$n:Int!){
@@ -149,53 +158,71 @@ Example: issue 42 "Let agents use GitHub more ergonomically" → `42-let-agents-
     }
     ```
 
-    Take the most recent `ClosedEvent.closer` that is a `PullRequest`. If none, fall back to the issue's own title.
-4. Bucket by Conventional-Commit type on the squash-merge subject:
+    Take the most recent `ClosedEvent.closer` that is a `PullRequest`. If none, fall back to the issue's own title + `state_reason`.
 
-    | Type | Bucket |
+4. Filter (adopted from reference):
+
+    | Conventional-commit type on squash-merge subject | Action |
     |---|---|
-    | `feat:` | **Added** |
-    | `fix:` | **Fixed** |
-    | `perf:` | **Changed** |
-    | `refactor:` | **Changed** |
-    | `revert:` | **Removed** |
-    | `chore:`, `test:`, `ci:`, `build:`, `style:` | (excluded — internal) |
-    | `docs:` | (excluded unless the issue has the `documentation` label) |
-    | any with `BREAKING CHANGE:` in body OR `!` after type | **Breaking** (rendered first, regardless of type bucket) |
+    | `feat`, `fix`, `perf` | **keep** |
+    | `chore`, `ci`, `refactor`, `test`, `build`, `style` | **drop** (internal) |
+    | `docs` | **drop** unless issue carries `documentation` label |
+    | release-please autorelease (`^chore: release v?\d+\.\d+\.\d+`) | **drop** always |
+    | any subject containing only "bump", "upgrade", "update deps", "update dependency" | **drop** (dependency churn) |
+    | any subject containing "fix lint", "fix types", "knip", "unused" with no other behavior change | **drop** (lint-only) |
 
-5. Strip `release-please` autorelease commits (subject matches `^chore: release v?\d+\.\d+\.\d+`).
-6. Format each entry: `- <human description from PR title, with leading "type: #N" stripped> ([#N](<issue-url>))`. Multiple PRs per issue collapse into a single entry; the issue URL wins over PR URLs as the canonical link.
+    When uncertain whether a kept commit is user-facing, **err on the side of inclusion** — the human reviewer makes the final call (matches the reference's policy).
+
+5. Categorize (friendly bucket names from the reference):
+
+    | Bucket | When to use |
+    |---|---|
+    | **New** | A user can do something they could not do before (typically `feat`). |
+    | **Improved** | An existing capability works better, looks better, or is faster (typically `perf`, sometimes `feat` for polish). |
+    | **Fixed** | A bug that affected users is resolved (typically `fix`). |
+    | **Breaking** | The change has `!` after type OR a `BREAKING CHANGE:` footer. Rendered above all other buckets. |
+
+    Use the type as a hint, but read the message: a `fix` that adds capability becomes **New**.
+
+6. Translate each kept entry to user-facing prose, matching the reference rules:
+
+    - Drop the leading `type:` / `type(scope):` prefix, issue/PR refs, and commit hashes.
+    - Sentence case for titles.
+    - Plain language a user understands; lead with the user-facing benefit.
+    - **Typography:** use **en dash** (`–`, U+2013) with a space on each side as the title-to-description separator, and in the heading date separator. Never emit `—` (em dash) or `--` (double hyphen). This is enforced in the renderer.
+    - No corporate vocabulary (no "leverage", "enhance", "seamless", "robust", "functionality").
+    - Target 1–2 sentences. One clear sentence beats two padded ones.
+    - Each entry ends with the canonical issue link in parentheses: `([#N](<issue-url>))`.
+
 7. Render the milestone block:
 
     ```markdown
-    ## [<version>] — <YYYY-MM-DD>
+    ## [<version>] – <YYYY-MM-DD>
 
     ### Breaking
 
-    - …
+    - **Title** – description ([#N](<issue-url>))
 
-    ### Added
+    ### New
 
-    - …
+    - **Title** – description ([#N](<issue-url>))
 
-    ### Changed
+    ### Improved
 
-    - …
+    - **Title** – description ([#N](<issue-url>))
 
     ### Fixed
 
-    - …
-
-    ### Removed
-
-    - …
+    - **Title** – description ([#N](<issue-url>))
     ```
 
-    Empty buckets are omitted. `<version>` defaults to milestone title; `<date>` defaults to milestone `closedAt` truncated to date, falling back to `dueOn` then today.
+    Empty buckets are omitted entirely (no `*None.*` stub). `<version>` defaults to milestone title; `<date>` defaults to milestone `closedAt` truncated to date, falling back to `dueOn`, then today.
 
-8. Default output: stdout. With `--write`: open `CHANGELOG.md`, locate the `## [Unreleased]` heading, insert the rendered block immediately after it (and before the next `## [` heading). Re-validate the resulting file with `markdownlint-cli2 CHANGELOG.md`.
+8. Default output: stdout, ready for the user to paste. With `--write`: open `CHANGELOG.md`, locate the `## [Unreleased]` heading, insert the rendered block immediately after it (and before the next `## [` heading). Re-validate the resulting file with `markdownlint-cli2 CHANGELOG.md`.
 
-**Refusals.** Cross-repo `-R`; milestone not found; `--write` against a `CHANGELOG.md` missing the `## [Unreleased]` anchor; private-repo leak guard hits in any rendered description (rare — only triggers if a PR title literally contains a private-repo URL).
+9. After the rendered block, append a short footer (matching the reference's "review notes"): commits-included count, commits-excluded-as-internal count, and any flags surfaced during translation (uncertain categorization, missing screenshot hint, etc.). The footer is rendered as a Markdown blockquote so it's easy to strip when copy-pasting.
+
+**Refusals.** Cross-repo `-R`; milestone not found; `--include-open` flag is required for an open milestone; `--write` against a `CHANGELOG.md` missing the `## [Unreleased]` anchor; private-repo leak guard hits in any rendered description (rare — only triggers if a PR title literally contains a private-repo URL).
 
 ## Supporting docs
 
@@ -237,8 +264,8 @@ Captures the conventions the patinaproject reference encodes in its own style do
 
 None block Gate 1; recording for traceability:
 
-1. **Skill invocation surface.** The plan assumes `/edit-issue`, `/new-issue`, `/new-branch`, `/changelog` as bare slash names. Claude Code namespaces plugin commands as `/<plugin>:<skill>`, i.e. `/github-flows:new-issue`. Verify both work; if Claude Code requires the namespaced form, document both in each `SKILL.md`.
-2. **`/changelog --write` and ordering.** Inserting after `## [Unreleased]` assumes that anchor exists in the bootstrap `CHANGELOG.md`. The current `CHANGELOG.md` is the release-please default; confirm anchor presence as Phase 2 work, otherwise add it.
+1. **Resolved at round 2:** Skill invocation surface — namespaced `/github-flows:<skill>` everywhere. See **Decisions** above.
+2. **`/write-changelog --write` and ordering.** Inserting after `## [Unreleased]` assumes that anchor exists in the bootstrap `CHANGELOG.md`. The current `CHANGELOG.md` is the release-please default and does not yet have an `## [Unreleased]` anchor; Phase 2 docs work adds it (or `--write` halts cleanly with the missing-anchor refusal).
 3. **Schema-probe caching across runs.** Cached only per-invocation. A future enhancement could persist to `.claude/cache/`, but it's out of scope here.
 
 ## Active acceptance criteria
@@ -250,4 +277,4 @@ All ACs from issue #1, restated as the active set under review:
 - **`/edit-issue` (Phase 3):** AC-1-9 (BLOCKED_BY mutation), AC-1-10 (`closeIssue` with stateReason), AC-1-11 (label/milestone existence refusal), AC-1-12 (cross-repo refusal).
 - **`/new-issue` (Phase 4):** AC-1-13 (duplicate surface + comment-instead offer), AC-1-14 (public-repo leak refusal), AC-1-15 (malformed LABELS.md halt), AC-1-16 (zero-label happy path).
 - **`/new-branch` (Phase 5):** AC-1-17 (kebab branch name), AC-1-18 (dirty-tree refusal), AC-1-19 (pnpm install on `pnpm-lock.yaml`), AC-1-20 (skip on no lockfile/no package.json).
-- **`/changelog` (Phase 6):** AC-1-21 (bucket routing for feat/fix/chore), AC-1-22 (Breaking-section first), AC-1-23 (`--write` insertion + markdownlint validity), AC-1-24 (cross-repo refusal).
+- **`/write-changelog` (Phase 6):** AC-1-21 (bucket routing: `feat`→New, `fix`→Fixed, `chore` excluded), AC-1-22 (Breaking section first), AC-1-23 (`--write` insertion + markdownlint validity), AC-1-24 (cross-repo refusal), AC-1-25 (en-dash typography: every dash separator in rendered output is U+2013 with surrounding spaces; no `—` or `--`).
