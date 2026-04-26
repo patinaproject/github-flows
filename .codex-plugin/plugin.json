@@ -1,0 +1,30 @@
+{
+  "name": "github-flows",
+  "version": "0.1.0",
+  "description": "Let agents use GitHub more ergonomically",
+  "author": {
+    "name": "Ted Mader",
+    "email": "ted@patinaproject.com",
+    "url": "https://github.com/tlmader"
+  },
+  "homepage": "https://github.com/patinaproject/github-flows",
+  "repository": "https://github.com/patinaproject/github-flows",
+  "license": "MIT",
+  "keywords": ["codex", "plugin", "skills"],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "github-flows",
+    "shortDescription": "Let agents use GitHub more ergonomically",
+    "longDescription": "Let agents use GitHub more ergonomically",
+    "developerName": "Ted Mader",
+    "category": "Productivity",
+    "capabilities": ["Write", "Interactive"],
+    "websiteURL": "https://github.com/patinaproject/github-flows",
+    "privacyPolicyURL": "https://github.com/patinaproject/github-flows",
+    "termsOfServiceURL": "https://github.com/patinaproject/github-flows",
+    "defaultPrompt": [
+      "Use $github-flows for the workflow described in this plugin's README."
+    ],
+    "brandColor": "#E6A77E"
+  }
+}
