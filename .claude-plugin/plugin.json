@@ -1,0 +1,14 @@
+{
+  "name": "github-flows",
+  "version": "0.1.0",
+  "description": "Let agents use GitHub more ergonomically",
+  "author": {
+    "name": "Ted Mader",
+    "url": "https://github.com/patinaproject"
+  },
+  "homepage": "https://github.com/patinaproject/github-flows",
+  "repository": "https://github.com/patinaproject/github-flows",
+  "license": "MIT",
+  "keywords": ["claude", "plugin", "skills"],
+  "skills": "./skills"
+}
