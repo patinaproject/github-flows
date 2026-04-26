@@ -1,0 +1,116 @@
+# Issue filing style
+
+This is the canonical guide for filing GitHub issues in `patinaproject/github-flows`. The `/github-flows:new-issue` skill reads this document at runtime and uses it as the single source of truth for body shape, AC format, label/milestone/relationship conventions, and the public-repo leak guard. Contributors filing issues by hand should follow the same rules.
+
+For the label inventory, see [`../.github/LABELS.md`](../.github/LABELS.md).
+
+## Body template
+
+Every issue body uses these five sections in this order. An optional `## Non-Goals / Implementation Notes` section may appear between **Proposal** and **Acceptance Criteria**.
+
+```markdown
+## Problem
+
+Describe the current state and why it is a problem. Be concrete. Do not
+prescribe the implementation here unless the technology is genuinely
+load-bearing.
+
+## Proposal
+
+Desired behavior or solution. Include examples, sketches, or API shapes if
+helpful.
+
+## Non-Goals / Implementation Notes (optional)
+
+Record preferences, constraints, or likely directions without locking the
+implementation. Omit if it adds no value.
+
+## Acceptance Criteria
+
+- Given {precondition}, when {action}, then {observable outcome}.
+- Given {precondition}, when {action}, then {observable outcome}.
+
+## Context
+
+Related issues (#N), PRs, or background. Leave blank if none.
+
+## Out of Scope
+
+What this issue explicitly does NOT cover.
+```
+
+Keep `## Out of Scope` present even when brief. Do not invent unlisted sections — if you need additional structure, extend an existing section instead.
+
+## Acceptance Criteria format
+
+- IDs follow the pattern `AC-<issue-number>-<integer>`, for example `AC-1-1`, `AC-1-2`.
+- Every AC uses Given / When / Then phrasing.
+- Include at least one AC.
+- ACs describe **observable outcomes**, not implementation steps.
+- When the issue ships in a PR, the PR description repeats the relevant ACs as `### AC-<issue>-<n>` headings with verification checkboxes — see `.github/pull_request_template.md`.
+
+## Title style
+
+Issue titles are plain-language summaries of the problem or request. Do **not** use Conventional-Commit prefixes (`feat:`, `docs:`, `fix:`).
+
+- Good: `Bootstrap and ship /edit-issue, /new-issue, /new-branch, /write-changelog skills`.
+- Bad: `feat: bootstrap and ship the four GitHub-flows skills`.
+
+PR titles **do** follow the commitlint format (`type: #<issue> short description`); that is a different surface. See `AGENTS.md` and `commitlint.config.js`.
+
+## Labels
+
+The label inventory lives in [`.github/LABELS.md`](../.github/LABELS.md). When filing or editing issues:
+
+- Pick from descriptions, never from memory.
+- Zero labels is valid — do not block on label selection.
+- `autorelease: pending` and `autorelease: tagged` are reserved for Release Please. Never apply them manually.
+- `javascript` and `github_actions` (Dependabot-reserved) are not user-applicable.
+
+## Milestones
+
+Milestones group issues that should ship together as a release. Naming aligns with the release tag — for example, milestone `v0.2.0` collects everything that ships in tag `v0.2.0`. The `/github-flows:write-changelog` skill renders the user-facing changelog block by walking a milestone's closed issues.
+
+- Use a milestone when the work is part of a planned release.
+- Skip milestones for one-off bug fixes that ship on the next available release.
+- The release manager owns milestone open/close transitions; agents and contributors propose assignment but do not close milestones.
+
+## Relationships
+
+Same-repo only — link issues using `#N`. Cross-repo references use the GitHub-native CrossReferencedEvent (write `Closes patinaproject/skills#22` and let GitHub resolve it).
+
+| Vocabulary | Implemented as | When to use |
+|---|---|---|
+| `sub-issue-of #N` | GraphQL `addSubIssue` mutation | The new issue is a strict child of #N — closing the parent should imply this is also done. |
+| `blocked-by #N` | GraphQL `addIssueDependency` with `BLOCKED_BY` (body-prose `Blocked by #N` fallback when the mutation is unavailable) | The new issue cannot start until #N closes. |
+| `blocks #N` | GraphQL `addIssueDependency` with `BLOCKS` (body-prose `Blocks #N` fallback) | The new issue must close before #N can start. |
+| `related-to #N` | Body-prose `Relates to #N` (no native primitive) | Loose reference — useful context but not a dependency. |
+
+The `/github-flows:new-issue` and `/github-flows:edit-issue` skills probe the GraphQL schema once per run and fall back to body prose automatically when `addIssueDependency` is unavailable.
+
+## Assignees
+
+Soft policy:
+
+- Self-assign when you intend to start within a few days.
+- Leave unassigned for free-pickup work.
+- Avoid assigning others without confirming first.
+
+Agents propose assignees but do not assign without explicit user direction.
+
+## Public-repo leak guard
+
+This repository is **public**. Issues, PRs, and any rendered output (including changelog blocks generated by `/github-flows:write-changelog`) are visible to anyone on the internet.
+
+The `/github-flows:new-issue` skill enforces the following at draft time and again at pre-creation:
+
+1. Refuse to include URLs of the shape `https://github.com/<org>/<private-repo>/...` where `<private-repo>` resolves to `visibility: PRIVATE` or returns 404 unauthenticated.
+2. Refuse to include file paths that match the `git remote get-url origin` of any locally-known private repo, when those paths appear inside fenced code blocks or quoted prose.
+3. When detection is ambiguous, surface a warning and ask for a public-safe rewrite — never silently rewrite.
+
+Contributors filing issues by hand should apply the same standard. If a discussion truly needs private context, file the issue in a private mirror or a private repo first and link out from a public-safe summary.
+
+## Reference implementations
+
+- [`skills/new-issue/SKILL.md`](../skills/new-issue/SKILL.md) — the agent-facing skill that automates issue filing per this guide.
+- `patinaproject/patinaproject` `.claude/skills/new-issue/workflow.md` — the upstream reference this skill is derived from.
