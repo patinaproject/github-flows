@@ -28,7 +28,7 @@ Get from zero to a real invocation in under a minute (assumes [Claude Code](http
 2. Install the plugin:
 
    ```text
-   /plugin install github-flows@patinaproject
+   /plugin install github-flows@patinaproject-skills
    ```
 
 3. File a real issue against this repo to confirm everything works:
