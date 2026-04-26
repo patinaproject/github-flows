@@ -184,17 +184,27 @@ Example: issue 42 "Let agents use GitHub more ergonomically" → `42-let-agents-
 
     Use the type as a hint, but read the message: a `fix` that adds capability becomes **New**.
 
-6. Translate each kept entry to user-facing prose, matching the reference rules:
+6. **Discover repo-specific style sources** before translating. Probe each of the following paths (case-insensitive on the filename, first match wins per category) and, if present, read it and treat it as authoritative for that category — its rules override the baselines below where they conflict.
+
+    | Category | Probe paths (in order) |
+    |---|---|
+    | Changelog style | `docs/changelog-style.md`, `docs/CHANGELOG_STYLE.md`, `.github/CHANGELOG_STYLE.md`, `CHANGELOG_STYLE.md` |
+    | Brand / writing voice | `docs/brand-voice.md`, `docs/BRAND_VOICE.md`, `.github/BRAND_VOICE.md`, `BRAND_VOICE.md` |
+
+    Record which sources were discovered (paths + commit SHA) in the review-notes footer (Step 9) so the human can audit what voice/style rules were applied. If neither category has a match, fall through to the baseline rules below; that fact is also recorded in the footer.
+
+7. Translate each kept entry to user-facing prose. Apply discovered repo-specific rules first; otherwise apply these baselines (they are the universal-safe subset that won't conflict with most repos):
 
     - Drop the leading `type:` / `type(scope):` prefix, issue/PR refs, and commit hashes.
     - Sentence case for titles.
     - Plain language a user understands; lead with the user-facing benefit.
-    - **Typography:** use **en dash** (`–`, U+2013) with a space on each side as the title-to-description separator, and in the heading date separator. Never emit `—` (em dash) or `--` (double hyphen). This is enforced in the renderer.
+    - **Typography:** use **en dash** (`–`, U+2013) with a space on each side as the title-to-description separator, and in the heading date separator. Never emit `—` (em dash) or `--` (double hyphen). This is enforced in the renderer regardless of repo style overrides — typography is a hard constraint, not a voice preference.
     - No corporate vocabulary (no "leverage", "enhance", "seamless", "robust", "functionality").
     - Target 1–2 sentences. One clear sentence beats two padded ones.
+    - Name the specific feature, page, library, or area when the commit mentions one — prefer concrete nouns over generic prose.
     - Each entry ends with the canonical issue link in parentheses: `([#N](<issue-url>))`.
 
-7. Render the milestone block:
+8. Render the milestone block:
 
     ```markdown
     ## [<version>] – <YYYY-MM-DD>
@@ -218,9 +228,9 @@ Example: issue 42 "Let agents use GitHub more ergonomically" → `42-let-agents-
 
     Empty buckets are omitted entirely (no `*None.*` stub). `<version>` defaults to milestone title; `<date>` defaults to milestone `closedAt` truncated to date, falling back to `dueOn`, then today.
 
-8. Default output: stdout, ready for the user to paste. With `--write`: open `CHANGELOG.md`, locate the `## [Unreleased]` heading, insert the rendered block immediately after it (and before the next `## [` heading). Re-validate the resulting file with `markdownlint-cli2 CHANGELOG.md`.
+9. Default output: stdout, ready for the user to paste. With `--write`: open `CHANGELOG.md`, locate the `## [Unreleased]` heading, insert the rendered block immediately after it (and before the next `## [` heading). Re-validate the resulting file with `markdownlint-cli2 CHANGELOG.md`.
 
-9. After the rendered block, append a short footer (matching the reference's "review notes"): commits-included count, commits-excluded-as-internal count, and any flags surfaced during translation (uncertain categorization, missing screenshot hint, etc.). The footer is rendered as a Markdown blockquote so it's easy to strip when copy-pasting.
+10. After the rendered block, append a short footer (matching the reference's "review notes"): commits-included count, commits-excluded-as-internal count, the discovered style/voice source paths from Step 6 (or "no repo style/voice doc found — applied baseline rules"), and any flags surfaced during translation (uncertain categorization, etc.). The footer is rendered as a Markdown blockquote so it's easy to strip when copy-pasting.
 
 **Refusals.** Cross-repo `-R`; milestone not found; `--include-open` flag is required for an open milestone; `--write` against a `CHANGELOG.md` missing the `## [Unreleased]` anchor; private-repo leak guard hits in any rendered description (rare — only triggers if a PR title literally contains a private-repo URL).
 
