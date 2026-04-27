@@ -2,7 +2,7 @@
 
 This is the canonical guide for filing GitHub issues in `patinaproject/github-flows`. The `/github-flows:new-issue` skill reads this document at runtime and uses it as the single source of truth for body shape, AC format, label/milestone/relationship conventions, and the public-repo leak guard. Contributors filing issues by hand should follow the same rules.
 
-For the label inventory, see [`../.github/LABELS.md`](../.github/LABELS.md).
+For the label inventory, run `gh label list --json name,description`.
 
 ## Body template
 
@@ -60,9 +60,12 @@ PR titles **do** follow the commitlint format (`type: #<issue> short description
 
 ## Labels
 
-The label inventory lives in [`.github/LABELS.md`](../.github/LABELS.md). When filing or editing issues:
+The label inventory comes from the remote repository via
+`gh label list --json name,description`. When filing or editing issues:
 
 - Pick from descriptions, never from memory.
+- A local `.github/LABELS.md` file may document labels for humans, but skills
+  must not require it.
 - Zero labels is valid — do not block on label selection.
 - `autorelease: pending` and `autorelease: tagged` are reserved for Release Please. Never apply them manually.
 - `javascript` and `github_actions` (Dependabot-reserved) are not user-applicable.

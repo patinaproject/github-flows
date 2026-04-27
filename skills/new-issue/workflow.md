@@ -4,7 +4,7 @@
 `docs/issue-filing-style.md` as the single source of truth for issue-filing
 conventions, while this workflow retains the procedural `gh`-driven steps.
 Authoritative inputs: `docs/issue-filing-style.md` for filing policy and
-`.github/LABELS.md` for the canonical label inventory.
+`gh label list` for the canonical remote label inventory.
 
 This workflow is an extension of the patinaproject `/new-issue` reference. It
 adds two behaviors: a **duplicate check** (Step 3) and a **public-repo leak
@@ -16,7 +16,7 @@ guard** (sub-step inside Steps 7 and 8).
 
 Create todos for each step before starting:
 
-- [ ] Step 1: Load label list from .github/LABELS.md
+- [ ] Step 1: Load label list from `gh label list`
 - [ ] Step 2: Gather problem description from user
 - [ ] Step 3: Duplicate check (search remote, offer comment / file new / abort)
 - [ ] Step 4: Suggest and confirm labels
@@ -31,38 +31,32 @@ Create todos for each step before starting:
 
 ## Step 1: Load Labels
 
-Read `.github/LABELS.md` from the repository root.
+Fetch the remote label inventory from the current working directory's default
+`gh` repository:
 
-**Parser rules (strict):**
-
-- Locate the `## Labels` heading.
-- Scan forward to the `| Name |` header row of the table.
-- Extract label names from **column 1 only** of every subsequent `|...|` row,
-  until the first line that does not start with `|`. Strip backtick characters
-  from each name.
-- Skip separator rows: any row where column 1 contains only `-` characters
-  and/or whitespace (e.g. `|------|...|`).
-- Ignore all backticks outside this table (Rules Summary, Adding/Changing
-  Labels, When-NOT-to-apply prose, etc. — these reference label names as
-  examples, not as inventory entries).
+```bash
+gh label list --json name,description --jq '.'
+```
 
 **After extraction, assert:**
 
-1. The list is non-empty.
-2. It is alphabetically sorted (A-Z, case-insensitive).
-3. It contains at least `bug` and `enhancement`.
+1. The command exits zero.
+2. The JSON parses successfully.
+3. The list is non-empty.
+4. Every label has a non-empty `name`.
 
 If any assertion fails, halt:
 
-> `.github/LABELS.md table appears malformed — refusing to proceed.`
+> `Could not load remote labels with gh label list — refusing to proceed.`
 
-If the file does not exist, halt:
+Use each label's `description` to guide selection. If one or more labels have
+an empty description, warn but continue:
 
-> `.github/LABELS.md` not found — cannot determine available labels. Ensure the
-> file exists at the repo root before running `/github-flows:new-issue`.
+> `Warning: some remote labels have empty descriptions; label suggestions may be less precise.`
 
-Do NOT hardcode any label names — derive all values from the parsed file every
-run.
+Do NOT hardcode any label names — derive all values from `gh label list` every
+run. A local `.github/LABELS.md` file may exist for repository documentation,
+but it is not required by this workflow and must not block issue creation.
 
 ---
 
@@ -422,7 +416,8 @@ or `github_actions` (e.g., typed it manually), refuse immediately:
 > "`{label}` is a Dependabot-only label — not available via
 > `/github-flows:new-issue`. Pick a different label or proceed with none."
 
-**Remote label existence check:** If any labels were chosen, run:
+**Remote label existence check:** If any labels were chosen, reuse the Step 1
+remote label inventory. If the inventory needs refreshing, run:
 
 ```bash
 gh label list --json name --jq '.[].name'
@@ -431,8 +426,8 @@ gh label list --json name --jq '.[].name'
 Intersect chosen labels against the remote list. If any chosen label is absent
 on remote, refuse:
 
-> "Label `{label}` is in `.github/LABELS.md` but not on the remote repo.
-> Run `gh label create {label} ...` first, or remove it from the selection."
+> "Label `{label}` does not exist on the remote repo. Run
+> `gh label create {label} ...` first, or remove it from the selection."
 
 **Remote milestone existence re-check:** If `$milestone` is non-empty,
 re-validate that it still exists as an open milestone:
@@ -602,9 +597,8 @@ Stop and do NOT call `gh issue create` if:
 5. Any issue number in a relationship does not resolve via GraphQL, or the
    user typed a cross-repo `owner/repo#N` format — emit the refusal from
    Step 6.
-6. `.github/LABELS.md` is missing or malformed — emit the
-   `.github/LABELS.md table appears malformed — refusing to proceed.` halt
-   message from Step 1.
+6. `gh label list` fails, returns malformed JSON, or returns no labels — emit
+   the remote-label halt message from Step 1.
 7. **Public-repo leak guard fired** (Step 7 or Step 8): the draft body
    references a private repository or private-repo-shaped path while the
    target repo visibility is `PUBLIC`. Emit the leak-guard refusal and ask
@@ -618,7 +612,7 @@ Stop and do NOT call `gh issue create` if:
 
 | Step | Action | Blocks on |
 |------|--------|-----------|
-| 1 | Read .github/LABELS.md | File missing or malformed → halt |
+| 1 | Read labels with `gh label list` | Command failure, malformed JSON, or empty list → halt |
 | 2 | Get description | No response → wait |
 | 3 | Duplicate check (gh issue list --search) | Comment / file new / abort prompt; abort stops the workflow |
 | 4 | Suggest + confirm labels | Optional; zero is fine (no labels chosen advisory in Step 9) |
@@ -633,7 +627,7 @@ Stop and do NOT call `gh issue create` if:
 
 | Mistake | Fix |
 |---------|-----|
-| Hardcoding label names | Read from .github/LABELS.md each run |
+| Hardcoding label names | Read from `gh label list` each run |
 | Refusing when no label chosen | Zero labels is valid — print the no-labels-chosen advisory in Step 9 and continue |
 | Using wrong body structure | Match the 5-section template exactly |
 | Creating issues in other repos | Only create in the current repo's default gh target |
