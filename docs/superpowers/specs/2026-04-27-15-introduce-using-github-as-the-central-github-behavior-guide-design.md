@@ -22,6 +22,9 @@ task calls for issue filing, branch setup, issue editing, or changelog writing.
   reservations.
 - Update user-facing docs and editor guidance so they center GitHub work around
   `/using-github`.
+- Use `superpowers:writing-skills` discipline for the new skill: capture a
+  baseline pressure scenario before the skill exists, then verify the written
+  skill closes the observed behavior gap.
 - Keep instructions concise, imperative, and compatible with Markdown linting.
 
 ## Approaches Considered
@@ -55,8 +58,9 @@ portable skill contract to invoke across runtimes.
 ## Design
 
 Add `skills/using-github/SKILL.md` with frontmatter that describes the skill as
-the behavior guide for GitHub work in repositories that use this plugin. Its
-body should tell agents to:
+the behavior guide for GitHub work in repositories that use this plugin.
+Following `superpowers:writing-skills`, the description should describe when to
+use the skill, not summarize the workflow. Its body should tell agents to:
 
 - discover repository guidance before acting;
 - use `/github-flows:new-issue` for new issues;
@@ -96,6 +100,13 @@ should mention the new skill directory as part of the skill inventory.
 
 ## Testing
 
+- Before writing the final skill text, run or document a RED pressure scenario
+  showing the current behavior without `/using-github`. The scenario should ask
+  an agent to handle a mixed GitHub task and record whether it discovers the
+  specialized workflows and shared repository rules without the umbrella skill.
+- After writing the skill, run or document the matching GREEN pressure scenario
+  showing that `/using-github` routes the agent to existing workflows and shared
+  GitHub conventions without copying conflicting procedure.
 - Run `pnpm lint:md`.
 - Use `rg "using-github|new-issue|new-branch|edit-issue|write-changelog"` to
   confirm the new skill and docs route to the expected workflows.
@@ -113,4 +124,6 @@ should mention the new skill directory as part of the skill inventory.
 
 No approval-relevant concerns remain. The main implementation risk is drift:
 `/using-github` must stay concise and route to the existing workflow files
-instead of copying their steps.
+instead of copying their steps. The implementation plan must include the
+`writing-skills` pressure-test loop so the skill is verified as process
+documentation, not only linted as Markdown.
