@@ -131,7 +131,7 @@ git commit -m "docs: #4 add What you get skills section to README"
 
 Get from zero to a real invocation in under a minute (assumes [Claude Code](https://docs.claude.com/claude-code)):
 
-1. Add the Patina marketplace:
+1. Add the Patina Project marketplace:
 
    ```text
    /plugin marketplace add patinaproject/skills
@@ -223,7 +223,7 @@ git commit -m "docs: #4 collapse README install matrix into details block"
 ```markdown
 ## Related
 
-- [Patina marketplace (`patinaproject/skills`)](https://github.com/patinaproject/skills)
+- [Patina Project marketplace (`patinaproject/skills`)](https://github.com/patinaproject/skills)
 - [Contributing](./CONTRIBUTING.md)
 - [Security policy](./SECURITY.md)
 - [Release process](./RELEASING.md)

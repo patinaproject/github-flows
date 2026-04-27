@@ -37,9 +37,8 @@ Use a targeted documentation audit rather than a global replacement. Search for
 whole-word `Patina` in public Markdown docs, inspect each match, and classify it
 as one of two cases:
 
-- **Company-display prose:** update to "Patina Project". Examples include
-  "Patina marketplace", "Patina plugins", "outside Patina", and "Patina
-  baseline".
+- **Company-display prose:** update shortened marketplace, plugin, baseline,
+  and "outside the company" wording to use "Patina Project".
 - **Identifier or proper machine name:** preserve as-is. Examples include
   `patinaproject/skills`, `patina-project-automation`, URLs, package names, and
   code examples.
@@ -81,4 +80,4 @@ when the audit is performed, then that identifier is preserved.
 
 No approval-relevant concerns remain. The main execution risk is accidentally
 editing identifiers during the wording cleanup, so the plan should include an
-explicit post-edit audit of remaining `Patina` and `patina` matches.
+explicit post-edit audit of remaining `Patina Project` and `patina` matches.

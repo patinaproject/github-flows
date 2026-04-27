@@ -27,7 +27,7 @@ Slash-command skills that let coding agents file issues, start branches, edit is
 
 Get from zero to a real invocation in under a minute (assumes [Claude Code](https://docs.claude.com/claude-code)):
 
-1. Add the Patina marketplace:
+1. Add the Patina Project marketplace:
 
    ```text
    /plugin marketplace add patinaproject/skills
@@ -61,7 +61,7 @@ branches, editing issues, writing changelogs, and preparing public-safe PRs.
 
 ### Claude Code
 
-1. Register the Patina marketplace:
+1. Register the Patina Project marketplace:
 
    ```text
    /plugin marketplace add patinaproject/skills
@@ -85,7 +85,7 @@ branches, editing issues, writing changelogs, and preparing public-safe PRs.
 
 ### OpenAI Codex CLI
 
-1. Register the Patina marketplace:
+1. Register the Patina Project marketplace:
 
    ```bash
    codex plugin marketplace add patinaproject/skills
@@ -220,7 +220,7 @@ Releases are driven by [release-please](https://github.com/googleapis/release-pl
 
 ## Related
 
-- [Patina marketplace (`patinaproject/skills`)](https://github.com/patinaproject/skills)
+- [Patina Project marketplace (`patinaproject/skills`)](https://github.com/patinaproject/skills)
 - [Contributing](./CONTRIBUTING.md)
 - [Security policy](./SECURITY.md)
 - [Release process](./RELEASING.md)

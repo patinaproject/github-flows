@@ -2,7 +2,7 @@
 
 ## Intent
 
-Ship the four GitHub-ergonomics skills the `github-flows` plugin exists to deliver, on top of the Patina baseline already scaffolded in this branch. Each skill is a thin, agent-callable Markdown contract (no executable code), discoverable via slash-command, and uses `gh` + GraphQL where the REST CLI is too coarse.
+Ship the four GitHub-ergonomics skills the `github-flows` plugin exists to deliver, on top of the Patina Project baseline already scaffolded in this branch. Each skill is a thin, agent-callable Markdown contract (no executable code), discoverable via slash-command, and uses `gh` + GraphQL where the REST CLI is too coarse.
 
 This design covers the four skill workflows plus the two supporting docs (`.github/LABELS.md`, `docs/issue-filing-style.md`) and the cross-cutting patterns shared between them. Phase 1 (the bootstrap pass) is already committed at `cf3a49b` and is in-scope for the same PR but not re-designed here.
 

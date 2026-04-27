@@ -20,7 +20,7 @@ then rerun the audit and lint to prove identifiers are preserved.
 - Modify `README.md`: update marketplace display wording and related link text.
 - Modify `RELEASING.md`: update company-display prose in release guidance.
 - Modify `docs/superpowers/specs/2026-04-26-1-bootstrap-and-ship-skills-design.md`:
-  update the historical "Patina baseline" display wording.
+  update the historical baseline display wording.
 - Modify `docs/superpowers/specs/2026-04-26-4-make-the-readme-awesome-design.md`:
   update historical README design copy that names the marketplace and plugins.
 - Modify `docs/superpowers/plans/2026-04-26-4-make-the-readme-awesome-plan.md`:
@@ -42,23 +42,22 @@ Run:
 rg -n '\bPatina\b|patina' README.md RELEASING.md docs/**/*.md
 ```
 
-Expected: output includes company-display prose such as "Patina marketplace",
-"Patina plugins", "outside Patina", and "Patina baseline", plus preserved
-identifier matches such as `patinaproject/skills` and
-`patina-project-automation`.
+Expected: output includes shortened company-display prose for marketplace,
+plugin, baseline, and "outside the company" wording, plus preserved identifier
+matches such as `patinaproject/skills` and `patina-project-automation`.
 
 - [ ] **Step 2: Classify matches before editing**
 
 Classify these company-display matches for editing:
 
 ```text
-README.md: Add/Register the Patina marketplace
-README.md: Patina marketplace link text
-RELEASING.md: forks outside Patina
-RELEASING.md: Patina marketplace manifest
-docs/superpowers/specs/2026-04-26-1-bootstrap-and-ship-skills-design.md: Patina baseline
-docs/superpowers/specs/2026-04-26-4-make-the-readme-awesome-design.md: Patina marketplace / Patina plugins
-docs/superpowers/plans/2026-04-26-4-make-the-readme-awesome-plan.md: Add the Patina marketplace / Patina marketplace link text
+README.md: add/register marketplace wording
+README.md: marketplace link text
+RELEASING.md: forks outside the company wording
+RELEASING.md: marketplace manifest wording
+docs/superpowers/specs/2026-04-26-1-bootstrap-and-ship-skills-design.md: baseline wording
+docs/superpowers/specs/2026-04-26-4-make-the-readme-awesome-design.md: marketplace/plugin wording
+docs/superpowers/plans/2026-04-26-4-make-the-readme-awesome-plan.md: marketplace wording and link text
 ```
 
 Expected: identifiers such as `patinaproject/skills`,
@@ -80,11 +79,11 @@ repo slugs are not selected for editing.
 Make these wording-only replacements:
 
 ```text
-Patina marketplace -> Patina Project marketplace
-Patina plugins -> Patina Project plugins
-outside Patina -> outside Patina Project
-Patina baseline -> Patina Project baseline
-Patina marketplace manifest -> Patina Project marketplace manifest
+marketplace display wording -> Patina Project marketplace
+plugin display wording -> Patina Project plugins
+outside-company display wording -> outside Patina Project
+baseline display wording -> Patina Project baseline
+marketplace manifest display wording -> Patina Project marketplace manifest
 ```
 
 Expected: public-facing sentences now use "Patina Project" as the complete

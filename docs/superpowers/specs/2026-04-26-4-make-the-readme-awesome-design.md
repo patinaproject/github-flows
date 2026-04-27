@@ -116,7 +116,7 @@ demo → value → trial → depth. Sections in order:
    slash-command invocation, and a one-line outcome. See "Skill summaries"
    below for the canonical copy.
 5. **Quick start.** A 60-second flow that assumes Claude Code, the most
-   common entry point. Three numbered steps: register the Patina
+   common entry point. Three numbered steps: register the Patina Project
    marketplace, install the plugin, run a real invocation against an
    example issue (for example,
    `/github-flows:new-issue` against this repo's issue tracker). No
@@ -128,7 +128,7 @@ demo → value → trial → depth. Sections in order:
    to `docs/install.md` and link. The `<details>` block is the preferred
    path because it keeps everything discoverable on one page.)
 7. **Related / Links.** A short closing section consolidating links to the
-   Patina marketplace (`patinaproject/skills`), other Patina plugins, and
+   Patina Project marketplace (`patinaproject/skills`), other Patina Project plugins, and
    the existing `CONTRIBUTING.md`, `SECURITY.md`, and `RELEASING.md` files.
 8. **License.** A one-line pointer to `LICENSE` (MIT).
 
