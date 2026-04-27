@@ -44,8 +44,8 @@ Get from zero to a real invocation in under a minute (assumes [Claude Code](http
    ```text
    /using-github
 
-   New issue: tried the github-flows quick start. When the issue is created,
-   start a branch for it.
+   New issue: the install instructions mention a command that no longer works.
+   When the issue is created, start a branch to fix the docs.
    ```
 
 The guide points the agent to the correct workflow for filing issues, starting
@@ -77,8 +77,8 @@ branches, editing issues, writing changelogs, and preparing public-safe PRs.
    ```text
    /using-github
 
-   New issue: tried the github-flows install steps. When the issue is created,
-   start a branch for it.
+   New issue: the install instructions mention a command that no longer works.
+   When the issue is created, start a branch to fix the docs.
    ```
 
 ### OpenAI Codex CLI
@@ -96,8 +96,8 @@ branches, editing issues, writing changelogs, and preparing public-safe PRs.
    ```text
    [$github-flows:using-github]
 
-   New issue: simplify the README examples. When the issue is created, create a
-   new branch and begin work.
+   New issue: the install instructions mention a command that no longer works.
+   When the issue is created, create a new branch and begin work.
    ```
 
 ### OpenAI Codex App
@@ -109,8 +109,8 @@ branches, editing issues, writing changelogs, and preparing public-safe PRs.
    ```text
    [$github-flows:using-github]
 
-   New issue: simplify the README examples. When the issue is created, create a
-   new branch and begin work.
+   New issue: the install instructions mention a command that no longer works.
+   When the issue is created, create a new branch and begin work.
    ```
 
 ### GitHub Copilot
