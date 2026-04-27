@@ -81,7 +81,7 @@ branches, editing issues, writing changelogs, and preparing public-safe PRs.
 3. Invoke from the target repository:
 
    ```text
-   Use $github-flows:using-github for the workflow described above.
+   Use $using-github for the workflow described above.
    ```
 
 ### OpenAI Codex App
@@ -91,7 +91,7 @@ branches, editing issues, writing changelogs, and preparing public-safe PRs.
 3. Invoke:
 
    ```text
-   Use $github-flows:using-github for the workflow described above.
+   Use $using-github for the workflow described above.
    ```
 
 ### GitHub Copilot
