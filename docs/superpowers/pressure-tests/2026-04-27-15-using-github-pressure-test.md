@@ -2,6 +2,14 @@
 
 ## RED: Baseline Without /using-github
 
+Run metadata:
+
+- Agent: `019dcd76-3d05-7ab1-9958-befe174efb14` (`Noether`)
+- Workspace: `/Users/tlmader/.codex/worktrees/9d37/github-flows`
+- Commit under test: `c1ce4aa` (`docs: #15 plan using-github implementation`)
+- Context: design and implementation plan existed; `skills/using-github/` did
+  not exist.
+
 Prompt:
 
 > You are in patinaproject/github-flows. A user asks you to file a GitHub issue,
@@ -27,12 +35,29 @@ Observed baseline response:
 - It identified the gap as "the repo has the ingredients, but not the
   entrypoint."
 
+Transcript excerpt:
+
+- "There is no single umbrella skill currently available to invoke for the
+  mixed prompt."
+- "So from a fresh-agent perspective, I would have to assemble the answer
+  piecemeal."
+- "The repo has the ingredients, but not the entrypoint."
+
 Expected fix:
 
 - `/using-github` exists and routes mixed GitHub work through the current
   specialized skills and repository docs.
 
 ## GREEN: With /using-github
+
+Run metadata:
+
+- Agent: `019dcd7d-7e44-72b3-8665-f1defad4c26c` (`Bacon`)
+- Workspace: `/Users/tlmader/.codex/worktrees/9d37/github-flows`
+- Commit under test: working tree later committed as `0dc30e1`
+  (`fix: #15 align using-github prompts`)
+- Context: `skills/using-github/SKILL.md`, OpenAI skill metadata, repository
+  guidance updates, and Codex `$using-github` prompt alignment were present.
 
 Prompt:
 
@@ -62,3 +87,13 @@ Non-blocking note:
 - Codex-facing prompts use the `$using-github` shorthand while most repository
   docs use `/github-flows:using-github`; this is editor-specific invocation
   syntax, not a procedural conflict.
+
+Transcript excerpt:
+
+- "Yes: current repo guidance discovers `/github-flows:using-github` as the
+  central entry point."
+- "`skills/using-github/SKILL.md` routes: new issues to
+  `/github-flows:new-issue`, existing issue edits to
+  `/github-flows:edit-issue`, issue branches to `/github-flows:new-branch`,
+  milestone changelogs to `/github-flows:write-changelog`."
+- "I did not find a conflicting duplicate mixed-GitHub procedure."
