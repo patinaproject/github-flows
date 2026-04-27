@@ -4,6 +4,17 @@ Generated automatically by [release-please](https://github.com/googleapis/releas
 
 User-facing changelog blocks for each milestone are rendered by the `/github-flows:write-changelog` skill and inserted under the `## [Unreleased]` heading. Released blocks below `## [Unreleased]` are owned by Release Please.
 
+## [2.0.0](https://github.com/patinaproject/using-github/compare/v1.1.0...v2.0.0) (2026-04-27)
+
+
+### ⚠ BREAKING CHANGES
+
+* #22 rename plugin to using-github ([#23](https://github.com/patinaproject/using-github/issues/23))
+
+### Features
+
+* [#22](https://github.com/patinaproject/using-github/issues/22) rename plugin to using-github ([#23](https://github.com/patinaproject/using-github/issues/23)) ([d48749c](https://github.com/patinaproject/using-github/commit/d48749c216cbb790f3cb4f98224232dd1bec12a0))
+
 ## [1.1.0](https://github.com/patinaproject/github-flows/compare/v1.0.1...v1.1.0) (2026-04-27)
 
 
