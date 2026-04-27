@@ -24,5 +24,28 @@ Expected fix:
 
 ## GREEN: With /using-github
 
-This section is completed after the skill and docs are implemented so RED
-evidence is committed before GREEN evidence.
+Prompt:
+
+> Use /github-flows:using-github for mixed GitHub work in this repository. A
+> user asks you to file a GitHub issue, start an issue branch, update PR
+> guidance, and avoid leaking private repo details. Which repository guidance
+> and skills do you use first?
+
+Observed pass:
+
+- `/github-flows:using-github` is the first skill for mixed GitHub behavior.
+- New issues route to `/github-flows:new-issue`.
+- Issue branches route to `/github-flows:new-branch`.
+- Existing issue edits route to `/github-flows:edit-issue`.
+- Milestone changelogs route to `/github-flows:write-changelog`.
+- PR work routes through `.github/pull_request_template.md`, commit and PR
+  title rules, and acceptance-criteria verification.
+- Public text is checked against public-repo leak-guard expectations from the
+  repository docs.
+- The umbrella skill does not duplicate the detailed specialized workflows.
+
+Non-blocking note:
+
+- There is no dedicated PR skill. `/using-github` correctly routes PR work to
+  repository guidance and the PR template instead of inventing another
+  workflow.
