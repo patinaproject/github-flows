@@ -1,7 +1,7 @@
 {
   "name": "using-github",
   "version": "1.1.0",
-  "description": "Let agents use GitHub more ergonomically",
+  "description": "Composable skill that lets agents use GitHub ergonomically",
   "author": {
     "name": "Ted Mader",
     "email": "ted@patinaproject.com",
