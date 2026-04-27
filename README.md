@@ -10,11 +10,18 @@ Slash-command skills that let coding agents file issues, start branches, edit is
 
 ## What you get
 
-- **`/github-flows:using-github`** — Start here for GitHub work. It centers repository conventions and routes agents to the right specialized workflow.
-- **`/github-flows:new-issue`** — File a new GitHub issue with smart label selection, duplicate detection, and a public-repo leak guard.
-- **`/github-flows:edit-issue`** — Edit an existing issue's title, body, labels, assignees, milestone, state, close reason, or relationships, preferring GraphQL where REST falls short.
-- **`/github-flows:new-branch`** — Start work on an issue: branch from the default branch as `<issue-number>-<kebab-title>`, rebase, and install dependencies via the highest-priority lockfile.
-- **`/github-flows:write-changelog`** — Render a user-facing changelog from a GitHub milestone, sourced from closed issues and their merging PRs.
+- **`/using-github`** — Start here for GitHub work. It reads repository rules
+  and routes issue, branch, PR, and changelog tasks to the right workflow.
+- **`/new-issue`** — File a new GitHub issue with smart label selection,
+  duplicate detection, and a public-repo leak guard.
+- **`/edit-issue`** — Edit an existing issue's title, body, labels, assignees,
+  milestone, state, close reason, or relationships, preferring GraphQL where
+  REST falls short.
+- **`/new-branch`** — Start work on an issue: branch from the default branch as
+  `<issue-number>-<kebab-title>`, rebase, and install dependencies via the
+  highest-priority lockfile.
+- **`/write-changelog`** — Render a user-facing changelog from a GitHub
+  milestone, sourced from closed issues and their merging PRs.
 
 ## Quick start
 
@@ -35,7 +42,10 @@ Get from zero to a real invocation in under a minute (assumes [Claude Code](http
 3. Invoke the GitHub behavior guide from a target repository:
 
    ```text
-   /github-flows:using-github
+   /using-github
+
+   New issue: tried the github-flows quick start. When the issue is created,
+   start a branch for it.
    ```
 
 The guide points the agent to the correct workflow for filing issues, starting
@@ -65,7 +75,10 @@ branches, editing issues, writing changelogs, and preparing public-safe PRs.
 3. Open a target repository (or an issue in one) in Claude Code and invoke:
 
    ```text
-   /github-flows:using-github
+   /using-github
+
+   New issue: tried the github-flows install steps. When the issue is created,
+   start a branch for it.
    ```
 
 ### OpenAI Codex CLI
@@ -81,7 +94,10 @@ branches, editing issues, writing changelogs, and preparing public-safe PRs.
 3. Invoke from the target repository:
 
    ```text
-   Use $using-github for the workflow described above.
+   [$github-flows:using-github]
+
+   New issue: simplify the README examples. When the issue is created, create a
+   new branch and begin work.
    ```
 
 ### OpenAI Codex App
@@ -91,7 +107,10 @@ branches, editing issues, writing changelogs, and preparing public-safe PRs.
 3. Invoke:
 
    ```text
-   Use $using-github for the workflow described above.
+   [$github-flows:using-github]
+
+   New issue: simplify the README examples. When the issue is created, create a
+   new branch and begin work.
    ```
 
 ### GitHub Copilot
