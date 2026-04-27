@@ -4,10 +4,11 @@
 
 Rename the repository identity from `patinaproject/github-flows` to
 `patinaproject/using-github` and collapse the shipped skill surface to the
-single `using-github` entry point. The repo should be ready for a maintainer to
-perform the GitHub settings rename, and public documentation should point
-readers at the new canonical repository slug where it is referring to this
-repository's location.
+single `using-github` entry point. The remaining skill must enforce the GitHub
+workflow behavior that used to be split across the specialized skills. The repo
+should be ready for a maintainer to perform the GitHub settings rename, and
+public documentation should point readers at the new canonical repository slug
+where it is referring to this repository's location.
 
 ## Requirements
 
@@ -27,6 +28,11 @@ repository's location.
   they read the release-facing documentation for this change, then the removal
   is marked as a breaking change and points them to `using-github` as the
   remaining entry point.
+- AC-22-6: Given an agent follows the remaining `using-github` skill, when it
+  performs GitHub work covered by the former specialized skills, then the skill
+  enforces the same repository-rule discovery, label/template use, issue safety,
+  branch naming, changelog, PR, and public-repo leak-guard behavior without
+  delegating to removed local skills.
 
 ## Current State
 
@@ -34,6 +40,8 @@ The repo and plugin are still named `github-flows`. The newer entry-point skill
 is `using-github`, but the plugin also ships `new-issue`, `edit-issue`,
 `new-branch`, and `write-changelog` as directly invokable skills. Removing those
 specialized skills is a breaking change for users who invoke them directly.
+The behavior those skills define is still expected to exist; only the direct
+specialized invocation surface is being removed.
 
 The repository also contains historical design docs, plans, changelog entries,
 issue links, and release links that point at `patinaproject/github-flows`.
@@ -50,7 +58,11 @@ reduction.
    automation documentation, and any package/plugin repository field if present.
 2. Remove all skill directories except `skills/using-github`.
 3. Update `using-github` so it remains a useful router for GitHub work without
-   instructing agents to invoke removed local skills.
+   instructing agents to invoke removed local skills. It should directly encode
+   the enforceable rules agents need for issue creation, issue editing, issue
+   branch creation, milestone changelog rendering, PR preparation, label and
+   template handling, relationship handling, duplicate checks, and public-repo
+   leak guarding.
 4. Update current install, usage, and release-facing documentation to mark the
    specialized skill removal as a breaking change and to name `using-github` as
    the supported entry point.
@@ -75,6 +87,8 @@ files directly. It may link to that issue where coordination context is useful.
 - Run `rg 'new-issue|edit-issue|new-branch|write-changelog' skills README.md
   AGENTS.md docs/issue-filing-style.md` and review remaining matches as either
   historical, migration, or breaking-change context.
+- Review `skills/using-github/SKILL.md` for direct, enforceable GitHub workflow
+  rules rather than references to removed local skill files.
 - Run `rg 'patinaproject/github-flows|github.com/patinaproject/github-flows'`
   and review remaining matches as intentional historical records, compatibility
   notes, or plugin namespace examples.
