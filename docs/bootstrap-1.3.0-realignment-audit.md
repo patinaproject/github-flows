@@ -13,8 +13,8 @@ safe local documentation/workflow wording updates while preserving the
 | Area | Result | Notes |
 | --- | --- | --- |
 | Core repo tooling | Aligned | PNPM, Husky, markdownlint, commitlint, version sync scripts, and public `SECURITY.md` are present. |
-| GitHub metadata | Partially aligned | Templates and workflows are present. Local label docs need Bootstrap 1.3.0 release-label wording. Remote release labels exist but have empty descriptions. |
-| Agent and repo docs | Partially aligned | Required docs are present. `docs/file-structure.md` still mentions removed specialized skill directories. |
+| GitHub metadata | Partially aligned | Templates and workflows are present. Local label docs now match Bootstrap 1.3.0 release-label wording. Remote release labels exist but have empty descriptions. |
+| Agent and repo docs | Aligned | Required docs are present and stale removed-skill wording was refreshed. |
 | Claude configuration | Aligned | `.claude/settings.json` enables `superteam` and `superpowers`. |
 | AI platform surfaces | Aligned | Claude, Codex, Copilot, Cursor, Windsurf, release-please, and skill surfaces are present. |
 | Superpowers opt-in | Aligned | `docs/superpowers/specs/` and `docs/superpowers/plans/` exist. |
@@ -26,11 +26,10 @@ safe local documentation/workflow wording updates while preserving the
 ## Applied Local Changes
 
 - Added this Bootstrap 1.3.0 realignment audit.
-- Planned local updates:
-  - Refresh `.github/LABELS.md` release-label wording and reserved-label colors.
-  - Remove stale removed-skill wording from `docs/file-structure.md`.
-  - Refresh `RELEASING.md` release-flow guidance from the Bootstrap 1.3.0 Patina Project supplement.
-  - Refresh `.github/workflows/release.yml` trigger comment/order to match the Bootstrap 1.3.0 Patina Project supplement.
+- Refreshed `.github/LABELS.md` release-label wording and reserved-label colors.
+- Removed stale removed-skill wording from `docs/file-structure.md`.
+- Refreshed `RELEASING.md` release-flow guidance from the Bootstrap 1.3.0 Patina Project supplement.
+- Refreshed `.github/workflows/release.yml` trigger comment/order to match the Bootstrap 1.3.0 Patina Project supplement.
 
 ## Remaining Follow-Ups
 
