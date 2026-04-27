@@ -50,6 +50,19 @@ safe local documentation/workflow wording updates while preserving the
 
 - `find . -maxdepth 3 ...` confirmed required baseline files and agent-plugin
   surfaces are present.
+- `pnpm install` completed with the lockfile already up to date.
+- `pnpm exec commitlint --help` completed successfully.
+- `pnpm lint:md` completed with `0 error(s)`.
+- `echo "feat: bad" | pnpm exec commitlint` failed as expected because the
+  subject lacks a GitHub issue reference.
+- `echo "feat: #1 ok" | pnpm exec commitlint` completed successfully.
+- `pnpm check:versions` confirmed both plugin manifests match
+  `package.json` version `2.0.0`.
+- `find skills -maxdepth 2 -name SKILL.md -print` returned only
+  `skills/using-github/SKILL.md`.
+- `rg 'uses: [^#@]*@[A-Za-z0-9_.-]+$' .github/workflows || true` printed all
+  workflow action references; each `uses:` entry is pinned to a full
+  40-character commit SHA.
 - `gh repo view --json nameWithOwner,visibility,defaultBranchRef` returned
   `patinaproject/using-github`, `PUBLIC`, default branch `main`.
 - `gh api repos/:owner/:repo --jq '{allow_squash_merge, allow_merge_commit, allow_rebase_merge, squash_merge_commit_title, squash_merge_commit_message, delete_branch_on_merge, allow_update_branch}'` returned the expected Bootstrap merge settings.
