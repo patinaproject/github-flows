@@ -1,15 +1,15 @@
 # Labels
 
-This file is the canonical inventory of GitHub issue and PR labels for
-`patinaproject/using-github`. The `using-github` skill reads this file at
-runtime and never hardcodes label names.
+This file documents when to apply each GitHub issue and PR label in
+`patinaproject/using-github`. For the authoritative runtime inventory, run
+`gh label list --json name,description`.
 
 ## Labels
 
 | Name | Description | Color |
 |------|-------------|-------|
-| `autorelease: pending` | Reserved for Release Please. Applied automatically to the open release PR. Do not apply or remove manually. | `c5def5` |
-| `autorelease: tagged` | Reserved for Release Please. Applied automatically after a release tag is cut. Do not apply or remove manually. | `c5def5` |
+| `autorelease: pending` | Reserved for Release Please. Applied automatically to the open release PR. Do not apply or remove manually. | `ededed` |
+| `autorelease: tagged` | Reserved for Release Please. Applied automatically after a release tag is cut. Do not apply or remove manually. | `ededed` |
 | `bug` | Something isn't working. | `d73a4a` |
 | `documentation` | Improvements or additions to documentation. | `0075ca` |
 | `duplicate` | This issue or pull request already exists. | `cfd3d7` |
@@ -26,7 +26,7 @@ runtime and never hardcodes label names.
 2. After merge, sync the change to the GitHub remote with `gh label create` / `gh label edit` (or via the Settings UI). A future follow-up will automate this from CI; until then it is manual.
 3. Names are sorted alphabetically (case-insensitive). Keep the table sorted on every change.
 
-## Reserved labels
+### Release-please (tool-managed)
 
 The `autorelease: pending` and `autorelease: tagged` labels are owned by Release Please:
 
