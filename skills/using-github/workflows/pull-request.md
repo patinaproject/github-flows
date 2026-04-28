@@ -106,6 +106,13 @@ Store the result as `$prTitle`.
 
 Build the body section-by-section using the headings captured in Step 2.
 
+**Heading levels.** Reproduce the template's section headings at the
+exact level the template uses (the top-level sections are `##`). Keep AC
+sub-rows at `### AC-<issue>-<n>`. See `docs/issue-filing-style.md`
+section "Heading levels for navigability" for the rule: GitHub's
+auto-TOC sidebar surfaces only `#`/`##`. Promote any sub-section that
+operators will want to jump to via the sidebar to `##`.
+
 **Linked issue.** Use `Closes #<issue>` when the PR completes the issue,
 `Related to #<issue>` otherwise. Omit the section if no issue applies.
 
@@ -267,6 +274,7 @@ Stop and do NOT open a PR if:
 | Mistake | Fix |
 |---------|-----|
 | Inventing PR section names | Reproduce the template headings verbatim, in source order |
+| Demoting top-level sections to `###` | Top-level sections must stay `##` so GitHub's auto-TOC sidebar surfaces them — see `docs/issue-filing-style.md` "Heading levels for navigability" |
 | Skipping the issue number in the title | `type: #N short description` is mandatory; ask the user if no branch-encoded issue |
 | Adding a scope like `feat(repo): …` | commitlint rejects scopes — drop them |
 | Including `⚠️ E2E gap` with placeholder text | Omit the row entirely when coverage is comprehensive |

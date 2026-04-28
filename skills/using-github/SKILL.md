@@ -48,6 +48,9 @@ supporting workflow contracts for this skill, not separate installable skills.
 - Duplicate checks happen before filing new issues.
 - Label choices come from `gh label list`; do not invent labels.
 - Pull request bodies use the repository template headings in order.
+- Long issue, PR, and discussion descriptions keep top-level sections at `##`
+  so GitHub's auto-TOC sidebar surfaces them — see
+  `docs/issue-filing-style.md` section "Heading levels for navigability".
 
 ## Public-Repo Leak Guard
 

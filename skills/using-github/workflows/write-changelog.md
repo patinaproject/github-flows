@@ -252,6 +252,12 @@ Render in this exact shape. **Breaking** appears first when present, then
 - **Title** – description ([#N](<issue-url>))
 ```
 
+The version heading uses `##` and the bucket headings use `###` deliberately:
+GitHub's auto-TOC sidebar surfaces only `#`/`##`, so each release stays
+sidebar-navigable while bucket sub-rows remain co-located under it. See
+`docs/issue-filing-style.md` "Heading levels for navigability". Do not promote
+buckets to `##` or demote the version heading.
+
 **Resolution rules:**
 
 - `<version>` defaults to `$milestoneTitle`.
