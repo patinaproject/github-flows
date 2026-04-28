@@ -1,6 +1,6 @@
 ---
 name: using-github
-description: Use when an agent is asked to perform GitHub work in a repository that should follow using-github conventions
+description: Use when working with GitHub in this repository — creating or editing issues, starting an issue branch, preparing a pull request, or rendering a milestone changelog. Triggers include "file an issue", "create issue", "edit issue #N", "start work on #N", "open a PR", "prepare pull request", and "generate changelog for milestone X".
 ---
 
 # Using GitHub
@@ -12,6 +12,8 @@ and pull request preparation.
 ## First Checks
 
 - Read root repository guidance such as `AGENTS.md`.
+- Read `docs/issue-filing-style.md` when filing or editing issues — it is the
+  single source of truth for issue-filing conventions in this repo.
 - Read local docs that govern the files or GitHub surface being changed.
 - Use repository templates for issues and pull requests.
 - Use canonical labels from the remote label inventory.
@@ -30,9 +32,7 @@ supporting workflow contracts for this skill, not separate installable skills.
 - Existing issue edit: follow `workflows/edit-issue.md`.
 - Start issue work: follow `workflows/new-branch.md`.
 - Milestone changelog: follow `workflows/write-changelog.md`.
-- Pull request: read `.github/pull_request_template.md`, use the repo's PR
-  title format, and include acceptance-criteria verification when the issue
-  defines acceptance criteria.
+- Pull request: follow `workflows/pull-request.md`.
 
 ## Shared GitHub Rules
 
@@ -64,7 +64,7 @@ release notes:
 
 | Mistake | Fix |
 |---------|-----|
-| Invoking removed specialized skills | Use this skill and its required procedure files. |
+| Looking for a separate sub-skill per workflow | None exist — this skill and its `workflows/` files are the entry point. |
 | Inventing labels or templates | Read the repository label inventory and templates. |
 | Treating PR creation as just a `gh pr create` command | Satisfy the repository PR template, title format, and acceptance-criteria rules first. |
 | Including private repository context in public text | Rewrite as a public-safe summary or file in a private repository first. |
