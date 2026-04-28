@@ -317,6 +317,9 @@ Rules:
 - Keep "Out of Scope" present even if brief.
 - `## Non-Goals / Implementation Notes` is optional; do not add other unlisted
   sections.
+- Keep top-level body sections at `##` so GitHub's auto-TOC sidebar surfaces
+  them. Reserve `###` for tightly-coupled sub-sections. See
+  `docs/issue-filing-style.md` section "Heading levels for navigability".
 - If `$contextSuffix` is non-empty (from `related-to` entries in Step 6),
   append it to the `## Context` section before presenting the draft.
 - If `$depSupported = false` and any `blocked-by`/`blocks` entries exist, also

@@ -46,6 +46,40 @@ What this issue explicitly does NOT cover.
 
 Keep `## Out of Scope` present even when brief. Do not invent unlisted sections — if you need additional structure, extend an existing section instead.
 
+## Heading levels for navigability
+
+GitHub renders an auto-generated **Table of contents** sidebar widget on
+issues, PRs, and discussions. The widget surfaces only top-level headings
+(`#` and `##`). Headings at `###` and deeper still resolve when linked
+manually, but they are hidden from the sidebar.
+
+Apply this rule when authoring any long issue body, PR description, or
+discussion post:
+
+- **Default to `##`** for every section a reader might jump to from the
+  sidebar. The five-section body template above already follows this rule.
+- **Reserve `###` for tightly-coupled sub-sections** under a single parent
+  — for example, the per-AC `### AC-<issue>-<n>` rows under
+  `## Acceptance criteria` in the PR template. Promoting every sub-row to
+  `##` would clutter the sidebar.
+- A manual in-body Markdown TOC (a `## Table of contents` bullet list with
+  anchor links) does resolve `###` and deeper anchors, but readers using
+  the sidebar will not see those sections. If a sub-section is important
+  enough to deep-link, also promote it to `##`.
+
+### GitHub anchor algorithm
+
+When you build anchors by hand for a manual in-body TOC, GitHub derives
+the anchor from the heading text as follows:
+
+1. Lowercase the text.
+2. Replace each space with `-`.
+3. Strip every character that is not alphanumeric, `-`, or `_`.
+4. Collapse runs of `-` into a single `-`.
+
+Example: `## Per-provider operator checklist` →
+`#per-provider-operator-checklist`.
+
 ## Acceptance Criteria format
 
 - IDs follow the pattern `AC-<issue-number>-<integer>`, for example `AC-1-1`, `AC-1-2`.
