@@ -74,7 +74,7 @@ field the user wants to touch:
 | Field | Operation | Value |
 |---|---|---|
 | `title` | `set` | new title |
-| `body` | `set` | new body (full replacement) |
+| `body` | `set` | new body (full replacement; keep top-level sections at `##` per `docs/issue-filing-style.md` "Heading levels for navigability") |
 | `labels` | `add` / `remove` | label name(s) |
 | `assignees` | `add` / `remove` | login(s) |
 | `milestone` | `set` / `clear` | milestone title or `""` |
