@@ -1,4 +1,4 @@
-# issue edit procedure Workflow
+# Edit Issue Workflow
 
 **Goal:** Edit an existing GitHub issue in the current repository, routing each
 field to the right API (REST via `gh issue edit`; GraphQL for relationships,
@@ -222,9 +222,19 @@ gh api graphql \
 
 ## Step 5: Confirm
 
-**Precondition:** schema probe complete (Step 4). Render the full changeset
-summary in a single block and wait for `approve` / `revise` / `cancel`. Allow
-up to 3 revise cycles, then halt with:
+**Precondition:** schema probe complete (Step 4).
+
+**Merge body-prose fallbacks before presenting.** If `$depSupported = false`
+and the changeset includes `blocked-by` / `blocks` rows, fold the
+`Blocked by #N` / `Blocks #N` lines into the body row's new value (under
+`## Context`, or as a trailing paragraph when `## Context` is absent). If the
+changeset has no `body` row, synthesize one from the current issue body so
+the merged value can be approved. Apply the same merge for any `related-to`
+rows (`Relates to #N`). The merged body is what the user sees and approves —
+Step 6 must apply that exact body.
+
+Render the full changeset summary in a single block and wait for `approve` /
+`revise` / `cancel`. Allow up to 3 revise cycles, then halt with:
 
 > "Maximum revise cycles reached — refusing. Re-run the skill with a fresh
 > request."
@@ -285,10 +295,10 @@ are already applied to the remote). State that the GraphQL portion of the
 apply step (Step 7) was skipped due to the failure.
 
 If the schema probe in Step 4 returned `$depSupported = false` and the
-changeset includes `blocked-by` / `blocks`, append the body-prose fallback
-**now** as part of the body update (not in Step 7) — adjust the body shown in
-Step 5 to include the `Blocked by #N` / `Blocks #N` lines and run
-`gh issue edit "$N" --body "<new>"` once with the merged body.
+changeset includes `blocked-by` / `blocks`, the merged body has already been
+folded in and approved during Step 5. Apply that approved body here in a
+single `gh issue edit "$N" --body "<merged>"` invocation; do not modify the
+body again in Step 7.
 
 ---
 
@@ -350,9 +360,9 @@ If `$depSupported = false`, dependency rows were already merged into the body
 in Step 6 — skip the GraphQL call and report the body-prose fallback for each
 row.
 
-**`related-to`** — append `Relates to #N` to the issue body (body-prose only;
-GitHub auto-creates a CrossReferencedEvent). Merge into the body update in
-Step 6 the same way as `blocked-by` / `blocks` fallback.
+**`related-to`** — already folded into the merged body during Step 5 and
+applied in Step 6 (`Relates to #N` under `## Context`). GitHub auto-creates a
+CrossReferencedEvent from the body reference. Nothing to mutate here.
 
 **`state: close` with `stateReason`** (only if `$closeReasonSupported = true`):
 

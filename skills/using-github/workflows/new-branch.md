@@ -1,4 +1,4 @@
-# issue branch procedure Workflow
+# New Branch Workflow
 
 **Goal:** From a GitHub issue reference, prepare a clean working branch and ready
 its dependencies — replacing the manual `fetch / checkout -b / rebase / install`

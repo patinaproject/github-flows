@@ -1,4 +1,4 @@
-# changelog procedure Workflow
+# Milestone Changelog Workflow
 
 **Goal:** Render a user-facing changelog block for a GitHub milestone, sourced
 from the merging PRs of that milestone's closed issues. Output is plain
@@ -6,12 +6,11 @@ Markdown to stdout (the user copies, edits, and pastes wherever release notes
 live), or — with `--write` — inserted under the `## [Unreleased]` anchor in
 `CHANGELOG.md` and re-validated with `markdownlint-cli2`.
 
-**Inspiration.** This skill adopts the filtering rules, friendly bucket names
-(`New` / `Improved` / `Fixed`), translation rules, and omit-empty-section
-output from the `patinaproject/patinaproject` `/changelog-generator` skill.
-The source of truth diverges: `changelog procedure` walks **GitHub
-milestones + merging PRs** rather than raw `git log`, which matches the
-release-please flow used by this repo.
+**Source of truth.** This workflow walks **GitHub milestones + merging PRs**
+rather than raw `git log` so that the rendered changelog matches the
+release-please flow used by this repo. Entries are categorized into the
+friendly buckets `New` / `Improved` / `Fixed` (with optional `Breaking`), and
+empty buckets are omitted from the rendered block.
 
 ---
 

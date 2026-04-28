@@ -1,4 +1,4 @@
-# new issue procedure Workflow
+# New Issue Workflow
 
 **Goal:** Create a well-structured GitHub issue using
 `docs/issue-filing-style.md` as the single source of truth for issue-filing
@@ -6,9 +6,10 @@ conventions, while this workflow retains the procedural `gh`-driven steps.
 Authoritative inputs: `docs/issue-filing-style.md` for filing policy and
 `gh label list` for the canonical remote label inventory.
 
-This workflow is an extension of the patinaproject `/new-issue` reference. It
-adds two behaviors: a **duplicate check** (Step 3) and a **public-repo leak
-guard** (sub-step inside Steps 7 and 8).
+Beyond drafting and creating, this workflow runs a **duplicate check** (Step 3)
+and a **public-repo leak guard** (sub-step inside Steps 7 and 8) so that
+existing threads are extended rather than re-filed and so that public issues
+never quote private repository content.
 
 ---
 
@@ -339,7 +340,9 @@ Validate the resolved `nameWithOwner` against the pattern
 or malformed), halt with the same message.
 
 Store `$visibility` (one of `PUBLIC`, `PRIVATE`, `INTERNAL`) for the leak
-guard below.
+guard below. The leak guard fires only on `PUBLIC`; `INTERNAL` repos (GHES /
+enterprise-internal visibility) are treated like `PRIVATE` for this guard
+because their content is not visible to the open internet.
 
 ### Public-repo leak guard (Step 7)
 
